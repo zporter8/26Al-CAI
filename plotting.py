@@ -6,7 +6,7 @@ from sklearn.neighbors import KernelDensity
 ##############################
 
 # uploading csv data for the CAIs
-url = "https://raw.githubusercontent.com/f-jorge/CAI-project/new_branch/CAI-project/Al26_CAIs_data%20-%2026Al_27Al.csv"
+url = "https://raw.githubusercontent.com/f-jorge/f-jorge.github.io/main/Al26_CAIs_data%20-%2026Al_27Al.csv"
 data = pd.read_csv(url, index_col=0)
 
 

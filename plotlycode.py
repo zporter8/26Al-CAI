@@ -1,10 +1,8 @@
-import plotly.express as px
-from plotly.subplots import make_subplots
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/f-jorge/CAI-project/new_branch/CAI-project/Al26_CAIs_data%20-%2026Al_27Al.csv"
+url = "https://raw.githubusercontent.com/f-jorge/f-jorge.github.io/main/Al26_CAIs_data%20-%2026Al_27Al.csv"
 data = pd.read_csv(url, index_col=0)
 
 x = data["26Al/27Al"]
@@ -65,6 +63,7 @@ labels = ["All Chondrites", "CO3.0", "CV3", "CM2", "CR2"]
 #fig = px.histogram(new_l, range_x =[-1,7])
 fig = ff.create_distplot(hist_data=hist_data, group_labels=labels, show_rug=False)
 fig.update_xaxes(title = "26Al/27Al", range = [-1,7])
+fig.update_layout(newselection_line_width= 5)
 
 grains = data["CAI size x"]
 g = []
