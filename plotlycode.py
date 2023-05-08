@@ -60,26 +60,26 @@ new_l4 = [float(x) for x in l4]
 #need to be list of lists in order to plot
 hist_data = [new_l, new_l1, new_l2, new_l3, new_l4]
 labels = ["All Chondrites", "CO3.0", "CV3", "CM2", "CR2"]
-#fig = px.histogram(new_l, range_x =[-1,7])
 fig = ff.create_distplot(hist_data=hist_data, group_labels=labels, show_rug=False)
 fig.update_xaxes(title = "26Al/27Al", range = [-1,7])
-fig.update_layout(newselection_line_width= 5)
+# want the histogram bars to be less opaque or for the KDE curves to be more opaque
+#fig.update_traces(opacity=.75)
+#fig.update_layout(newselection_line_width= 5)
 
-grains = data["CAI size x"]
-g = []
-for i in g:
-    if isinstance(i, str):
-        if not i.isalpha() and i[0] != 'M':
-            g.append(i)
-g.sort()
+small = data.loc[data["CAI size x"] <= '100']
+g1 = small["CAI size x"]
 
-#small = g[(g["CAI size x"] <= "100")]
-#new_small = [float(x) for x in small]
+medium = data[(data['CAI size x'] > '100') & (data['CAI size x'] <= '500')]
+g2 = medium["CAI size x"]
 
-#print(small)
+large = data.loc[data["CAI size x"] > '500']
+g3 = large["CAI size x"]
 
-trace1 = go.Scatter(x=l, y=grains, name = "CAI size X", mode= 'markers', xaxis='x2', yaxis= 'y2')
-fig.add_traces([trace1])
+# add traces to scatter plot... small, medium and large grains
+trace1 = go.Scatter(x=l, y=g1, name = "small grains", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace2 = go.Scatter(x=l, y=g2, name = "medium grains", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace3 = go.Scatter(x=l, y=g3, name = "large grains", mode= 'markers', xaxis='x2', yaxis= 'y2')
+fig.add_traces([trace1, trace2, trace3])
 
 # initialize xaxis2 and yaxis2
 fig['layout']['xaxis2'] = {}
@@ -93,9 +93,10 @@ fig.layout.xaxis2.update({'title': '26Al/27Al'})
 # The graph's yaxis MUST BE anchored to the graph's xaxis
 fig.layout.yaxis2.update({'anchor': 'x2'})
 fig.layout.yaxis2.update({'title': 'Size'})
+#fig.update_layout(yaxis2_range = [0, 30000])
 
 # Update the margins to add a title and see graph x-labels.
 fig.layout.margin.update({'t':50, 'b':100})
-#fig.layout.update({'title': '2016 Hockey Stats'})
+#fig.layout.update({'title': '26Al'})
 
 fig.show()
