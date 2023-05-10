@@ -76,9 +76,9 @@ large = data.loc[data["CAI size x"] > '500']
 g3 = large["CAI size x"]
 
 # add traces to scatter plot... small, medium and large grains
-trace1 = go.Scatter(x=l, y=g1, name = "CAI size <100", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace1 = go.Scatter(x=l, y=g1, name = "CAI size < 100", mode= 'markers', xaxis='x2', yaxis= 'y2')
 trace2 = go.Scatter(x=l, y=g2, name = "CAI size 100-500", mode= 'markers', xaxis='x2', yaxis= 'y2')
-trace3 = go.Scatter(x=l, y=g3, name = "CAI size >500", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace3 = go.Scatter(x=l, y=g3, name = "CAI size > 500", mode= 'markers', xaxis='x2', yaxis= 'y2')
 fig.add_traces([trace1, trace2, trace3])
 
 # initialize xaxis2 and yaxis2
