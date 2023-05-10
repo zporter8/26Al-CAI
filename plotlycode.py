@@ -99,4 +99,11 @@ fig.layout.yaxis2.update({'title': 'Size'})
 fig.layout.margin.update({'t':50, 'b':100})
 #fig.layout.update({'title': '26Al'})
 
-fig.show()
+#fig.show()
+
+
+######################################
+#html = io.to_html(fig, full_html=True, include_plotlyjs='cdn')
+import plotly.io as io
+with open('facetted.html', 'w') as f:
+    f.writelines(io.to_html(fig, include_plotlyjs='cnd', full_html=True))
