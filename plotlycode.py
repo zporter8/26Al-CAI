@@ -68,17 +68,38 @@ fig.update_xaxes(title = "26Al/27Al", range = [-1,7])
 
 small = data.loc[data["CAI size x"] <= '100']
 g1 = small["CAI size x"]
+g_1 = []
+for i in g1:
+    if isinstance(i, str):
+        if not i.isalpha() and i[0] != 'M':
+            g_1.append(i)
+g_1.sort()
+#print(g_1)
 
-medium = data[(data['CAI size x'] > '100') & (data['CAI size x'] <= '500')]
+medium = data[(data['CAI size x'] >= '100') & (data['CAI size x'] <= '500')]
 g2 = medium["CAI size x"]
+g_2 = []
+for i in g2:
+    if isinstance(i, str):
+        if not i.isalpha() and i[0] != 'M':
+            g_2.append(i)
+g_2.sort()
+#print(g_2)
 
 large = data.loc[data["CAI size x"] > '500']
 g3 = large["CAI size x"]
+g_3 = []
+for i in g3:
+    if isinstance(i, str):
+        if not i.isalpha() and i[0] != 'M':
+            g_3.append(i)
+g_3.sort()
+#print(g_3)
 
 # add traces to scatter plot... small, medium and large grains
-trace1 = go.Scatter(x=l, y=g1, name = "CAI size < 100", mode= 'markers', xaxis='x2', yaxis= 'y2')
-trace2 = go.Scatter(x=l, y=g2, name = "CAI size 100-500", mode= 'markers', xaxis='x2', yaxis= 'y2')
-trace3 = go.Scatter(x=l, y=g3, name = "CAI size > 500", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace1 = go.Scatter(x=l, y=g_1, name = "CAI size 0-100", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace2 = go.Scatter(x=l, y=g_2, name = "CAI size 100-500", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace3 = go.Scatter(x=l, y=g_3, name = "CAI size > 500", mode= 'markers', xaxis='x2', yaxis= 'y2')
 fig.add_traces([trace1, trace2, trace3])
 
 # initialize xaxis2 and yaxis2
@@ -89,11 +110,12 @@ fig['layout']['yaxis2'] = {}
 fig.layout.xaxis.update({'domain': [0, .5]})
 fig.layout.xaxis2.update({'domain': [0.6, 1.]})
 fig.layout.xaxis2.update({'title': '26Al/27Al'})
+#fig.layout.xaxis2.update(range = (-1,7))
 
 # The graph's yaxis MUST BE anchored to the graph's xaxis
 fig.layout.yaxis2.update({'anchor': 'x2'})
 fig.layout.yaxis2.update({'title': 'Size'})
-#fig.update_layout(yaxis2_range = [0, 30000])
+#fig.layout.yaxis2.update(range = (0,30000))
 
 # Update the margins to add a title and see graph x-labels.
 fig.layout.margin.update({'t':50, 'b':100})
