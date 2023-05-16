@@ -1,0 +1,426 @@
+<head>
+    <!-- Plotly.js -->
+     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  </head>
+  
+  <body>
+    <div id="myDiv" style="width: 100%; height:100%;"><!-- Plotly chart will be drawn inside this DIV --></div>
+    <script>
+
+    Plotly.d3.csv('https://raw.githubusercontent.com/f-jorge/f-jorge.github.io/main/Al26_CAIs_data%20-%2026Al_27Al.csv', function(err, rows){
+    function unpack(rows, key) {
+      return rows.map(function(row) { return row[key]; });
+    }
+      
+    var button_layer_1_height = 1.24
+    var button_layer_2_height = 1.16
+    var button_layer_3_height = 1.08
+    var button_layer_4_height = 1.01
+    var annotation_offset = 0.04
+
+    var CAI_data=[ ]
+    for(i=0;i<1000;i++)
+    {
+      CAI_data.push(unpack(rows,i));
+    }
+
+    var al26 = unpack(rows, '26Al/27Al');
+    var chon = unpack(rows, 'chondrite type');
+    var mintype = unpack(rows, 'min type');
+    var CAIsizeX = unpack(rows, 'CAI size x');
+    var CAIsizeY = unpack(rows, 'CAI size y');
+
+    // trying to group the different chondrite types
+    var CO3 = chon.filter(function(type){
+        return type == 'CO3.0'
+    });
+
+    var CV3 = chon.filter(function(type){
+        return type == 'CV3'
+    });
+
+    var CR2 = chon.filter(function(type){
+        return type == 'CR2'
+    });
+
+    var CM2 = chon.filter(function(type){
+        return type == 'CM2'
+    });
+
+    // trying to filter the diferent CAI types
+    var FUN = mintype.filter(function(min){
+        return min == 'A/B FUN'
+    });
+
+    var coarse = mintype.filter(function(min){
+        return min == 'cor'
+    });
+
+    var small = CAIsizeX.filter(function(size){
+        return size <= '100'
+    });
+
+    function filterRange(arr, a, b) {
+        return arr.filter(item => (a <= item && item <= b));
+    }
+
+    var medium = filterRange(CAIsizeX, 100, 500);
+
+    var large = filterRange(CAIsizeX, 500, 40000);
+
+    var trace1 = {
+        // first trace that should be the data used to create the histograms
+        x: unpack(rows, '26Al/27Al'),
+        xaxis: "x",
+        name: 'ALL 26Al/27Al',
+        type: 'histogram',
+            //  histnorm: 'density',
+            //  marker: {
+            //     color: "rgba(100, 200, 102, 0.7)",
+            //  }
+    };
+
+    var trace2 = {
+        // second trace that should be used to create the scatter plots
+        // this trace has the y as chondrite type which is the second line of buttons on the plotting page
+        x: unpack(rows, '26Al/27Al'),
+        y: unpack(rows, 'chondrite type'),
+        xaxis: 'x4',
+        yaxis: 'y4',
+        mode: 'markers',
+        name: 'ALL chondrite types',
+        type: "scatter"
+    };
+
+    var trace3 = {
+        // third trace that should be used to create the scatter plots
+        // this trace has the y as CAI type which is the third line of buttons on the plotting page
+        // future: be able to connect both the scatter y axis components
+        x: unpack(rows, '26Al/27Al'),
+        y: unpack(rows, 'min type'),
+        xaxis: 'x3',
+        yaxis: 'y3',
+        mode: 'markers',
+        name: 'ALL min types',
+        type: "scatter"
+    };
+
+    var trace4 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: CO3,
+        xaxis: "x2",
+        yaxis: "y2",
+        name: 'CO3.0',
+        type: 'histogram',
+              histnorm: 'density',
+    };
+
+    var trace5 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: CV3,
+        xaxis: 'x2',
+        yaxis: 'y2',
+        name: 'CV2',
+        type: 'histogram',
+             histnorm: 'density',
+    };
+
+    var trace6 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: CR2,
+        xaxis: 'x2',
+        yaxis: 'y2',
+        name: 'CR2',
+        type: 'histogram',
+             histnorm: 'density',
+    };
+
+    var trace7 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: CM2,
+        xaxis: 'x2',
+        yaxis: 'y2',
+        name: 'CM2',
+        type: 'histogram',
+             histnorm: 'density',
+    };
+
+    var trace8 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: small,
+        xaxis: 'x3',
+        yaxis: 'y3',
+         error_x: {
+              array: unpack(rows, '(26Al/27Al) 2 sig'),
+              type: 'data',
+          },
+        mode: 'markers',
+        name: 'CAI size 0-100',
+        type: "scatter"
+    };
+
+    var trace9 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: medium,
+        xaxis: 'x3',
+        yaxis: 'y3',
+         error_x: {
+              array: unpack(rows, '(26Al/27Al) 2 sig'),
+              type: 'data',
+          },
+        mode: 'markers',
+        name: 'CAI size 100-500',
+        type: "scatter"
+    };
+
+    var trace10 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: large,
+        xaxis: 'x3',
+        yaxis: 'y3',
+         error_x: {
+              array: unpack(rows, '(26Al/27Al) 2 sig'),
+              type: 'data',
+          },
+        mode: 'markers',
+        name: 'CAI size >500',
+        type: "scatter",
+            marker: {
+                 color: "rgba(100, 200, 102, 0.7)",
+              }
+    };
+
+    var trace11 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: FUN,
+        xaxis: 'x4',
+        yaxis: 'y4',
+         error_x: {
+              array: unpack(rows, '(26Al/27Al) 2 sig'),
+              type: 'data',
+          },
+        name: 'FUN CAI',
+        mode: 'markers',
+        type: 'scatter'
+    };
+    var trace12 = {
+        x: unpack(rows, '26Al/27Al'),
+        y: coarse,
+        xaxis: 'x4',
+        yaxis: 'y4',
+        error_x: {
+             array: unpack(rows, '(26Al/27Al) 2 sig'),
+             type: 'data',
+         },
+        name: 'coarse grains',
+        mode: 'markers',
+        type: 'scatter'
+    };
+
+    var data = [trace1, trace4, trace5, trace6, trace7, trace8, trace9, trace10, trace11, trace12];
+    
+
+    // var updatemenus=[
+    //     {
+    //         buttons: [   
+    //             {
+    //                 args: ['trace1','histogram'],
+    //                 // this button should use the trace1 data to create a histogram
+    //                 label: 'histogram w/KDE',
+    //                 method: 'restyle'
+    //             },
+    //             {
+    //                 args: ['trace2', 'scatter'],
+    //                 // this button should use the trace2 (future: also trace3) data to create a scatter plot
+    //                 label:'scatter w/uncertainty',
+    //                 method:'restyle'
+    //             }  
+    //         ],
+    //         direction: 'left',
+    //         pad: {'r': 10, 't': 10},
+    //         showactive: true,
+    //         type: 'buttons',
+    //         x: .15,
+    //         xanchor: 'left',
+    //         y: button_layer_1_height,
+    //         yanchor: 'top' 
+    //     },
+    //     {
+    //         buttons: [   
+    //             // these buttons should be able to use the chondrite type data to modify the plots
+    //             {
+    //                 args: ['trace2', '26Al/27Al'],
+    //                 label: 'All',
+    //                 method: 'restyle'
+    //             },
+    //             {
+    //                 args: ['trace2', 'CO3.0'],
+    //                 label:'CO3',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['trace2', 'CV2'],
+    //                 label:'CV2',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['trace2', 'CR2'],
+    //                 label:'CR2',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['trace2', 'CM2'],
+    //                 label:'CM2',
+    //                 method:'restyle'
+    //             }
+    //         ],
+    //         direction: 'left',
+    //         pad: {'r': 10, 't': 10},
+    //         showactive: true,
+    //         type: 'buttons',
+    //         x: 0.15,
+    //         xanchor: 'left',
+    //         y: button_layer_2_height,
+    //         yanchor: 'top' 
+    //     },
+    //     {
+    //         buttons: [   
+    //             // these buttons should be able to modify the plots by changing the CAI types of the data
+    //             {
+    //                 args: ['trace3', 'y'],
+    //                 label: 'All',
+    //                 method: 'restyle'
+    //             },
+    //             {
+    //                 args: ['trace3', 'FUN'],
+    //                 label:'FUN',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['colorscale', 'no FUN'],
+    //                 label:'no FUN',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['colorscale', 'fine grained'],
+    //                 label:'fine grained',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['colorscale', 'cor grains'],
+    //                 label:'coarse grained',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['colorscale', 'FGF'],
+    //                 label:'FGF',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['colorscale', 'CTA'],
+    //                 label:'CTA',
+    //                 method:'restyle'
+    //             },
+    //             {
+    //                 args: ['colorscale', 'type B'],
+    //                 label:'type B',
+    //                 method:'restyle'
+    //             }
+    //             ],
+    //         direction: 'left',
+    //         pad: {'r': 10, 't': 10},
+    //         showactive: true,
+    //         type: 'buttons',
+    //         x: 0.15,
+    //         xanchor: 'left',
+    //         y: button_layer_3_height,
+    //         yanchor: 'top' 
+    //     },
+    // ];
+
+    var layout = {
+        grid: {
+            rows:2,
+            columns:2,
+            pattern: 'independent'
+        },
+        automargin: true,
+        editrevision: true,
+        legend: {
+            title: {
+                text: '*select legend item to view'
+            },
+        },
+        yref: 'paper',
+        xref: 'paper',
+        itemclick: 'toggleothers',
+        // updatemenus: updatemenus,
+        colorbar: {
+            dtick: '1',
+            nticks: '10'
+        },
+        title: false,
+        xaxis: {
+            range: [-1,7],
+            title:{
+                text: '26Al/27Al'
+            }
+        },
+        yaxis: {
+            title:{
+                text: 'count',
+                xref:'paper',
+                yref: 'paper'
+            }
+        },
+        xaxis2: {
+            range: [-1,7],
+            title: {
+                text: "26Al/27Al",
+                anchor: "y2"
+            }
+        },
+        yaxis2: {
+            title: {
+                text: "density",
+                anchor: "x2"
+            }
+        },
+        xaxis3: {
+            range: [-1,7],
+            title: {
+                text: "26Al/27Al",
+                anchor: "y3"
+            }
+        },
+        yaxis3: {
+            title: {
+                text: "size",
+                anchor: "x3"
+            }
+        },
+        xaxis4: {
+            range: [-1,7],
+            title: {
+                text: "26Al/27Al",
+                anchor: "y4"
+            }
+        },
+        yaxis4: {
+            title: {
+                anchor: "x4"
+            }
+        },
+
+}
+
+    var config = {responsive: true,
+        displaylogo: false
+    }
+
+    Plotly.plot("myDiv", data, layout, config, {showSendToCloud: true});
+
+    });
+
+    </script>
+  </body>

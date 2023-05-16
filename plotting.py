@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from scipy.stats import norm
 from sklearn.neighbors import KernelDensity
 
 ##############################
@@ -37,171 +38,67 @@ def al26_all():
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=[10,5])
     # histogram
-    m, bins, patches = ax1.hist(x_train, bins=10, color = 'lightgrey', edgecolor = 'grey')
+    m, bins, patches = ax1.hist(x_train, bins=10, color = 'lightblue', edgecolor = 'cornflowerblue')
     ax1.set_xticks(bins)
     ax1.set_xlabel('26Al/27Al')
     ax1.set_ylabel('count')
     ax1.set_title('All CAI, All Chondrites')
 
+#################
     #KDE
     # for x_test the minimum value in the array and the max value will create the x-axis
     # the n value will dictate how many points its going to do kde on, so all of the values
+
     x_test = np.linspace(minimum, maximum, n)[:, np.newaxis]
+
     # the following code is using the kerneldensity function and fitting it to our data
-    model = KernelDensity()
-    model.fit(n_numpy_array)
-    log_dens = model.score_samples(x_test)
-    ax2.fill(x_test, np.exp(log_dens), c='lightgrey')
+
+    #model = KernelDensity(kernel = 'gaussian').fit(n_numpy_array)
+    #log_dens = model.score_samples(x_test)
+    #ax2.fill(x_test, np.exp(log_dens), c='lightgrey')
     ax2.set_xlabel('26Al/27Al')
-    ax2.set_ylabel('value')
+    #ax2.set_ylabel('value')
     ax2.set_title('Kernel Density Estimation')
+
+# only want one kde line plotted
+    # this code is plotting a few different kde types... we only want gaussian
+    # Plot a 1D density example
+
+    #true_dens = 0.3 * norm(0, 1).pdf(x_test[:, 0]) + 0.7 * norm(5, 1).pdf(x_test[:, 0])
+
+    # you can add back in the input distribution here and the other kde types
+    #ax2.fill(x_test[:, 0], true_dens, fc="black", alpha=0.2, label="input distribution")
+    #colors = ["navy", "cornflowerblue", "darkorange"]
+    #kernels = ["gaussian", "tophat", "epanechnikov"]
+
+    # this is for only the gaussian distribution
+    color = ["pink"]
+    kernel = ["gaussian"]
+    lw = 2
+
+# this is adding in the line plot version of the kde distribution rather than filled in input distribution
+    for color, kernel in zip(color, kernel):
+        kde = KernelDensity(kernel=kernel, bandwidth=0.5).fit(n_numpy_array)
+        log_dens = kde.score_samples(x_test)
+        ax2.plot(
+            x_test[:, 0],
+            np.exp(log_dens),
+            color=color,
+            lw=lw,
+            linestyle="-",
+            label="kernel = '{0}'".format(kernel),
+        )
+
+    ax2.legend(loc="upper left")
     plt.show()
-#al26_all()
-
-def al26_CO3():
-    CO3_0 = data.loc[data['type'] == 'CO3.0']
-    x = CO3_0["26Al/27Al"]
-    x_train = []
-    for i in x:
-        if isinstance(i, str):
-            # if i[0] != 'M':
-            if not i.isalpha() and i[0] != 'M':
-                x_train.append(i)
-    x_train.sort()
-    n = len(x_train)
-    minimum = float(min(x_train))
-    maximum = float(max(x_train))
-    numpy_array = np.array(x_train)
-    n_numpy_array = numpy_array.reshape(-1, 1)
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=[10,5])
-    # histogram
-    m, bins, patches = ax1.hist(x_train, bins=10, color = 'lightgrey', edgecolor = 'grey')
-    ax1.set_xticks(bins)
-    ax1.set_xlabel('26Al/27Al')
-    ax1.set_ylabel('count')
-    ax1.set_title('All CAI, CO3 Chondrites')
-
-    #KDE
-    x_test = np.linspace(minimum, maximum, n)[:, np.newaxis]
-    model = KernelDensity()
-    model.fit(n_numpy_array)
-    log_dens = model.score_samples(x_test)
-    ax2.fill(x_test, np.exp(log_dens), c='lightgrey')
-    ax2.set_xlabel('26Al/27Al')
-    ax2.set_ylabel('value')
-    ax2.set_title('Kernel Density Estimation')
-    plt.show()
-#al26_CO3()
+al26_all()
 
 
-def al26_CV3():
-    CV3 = data.loc[data['type'] == 'CV3']
-    x = CV3["26Al/27Al"]
-    x_train = []
-    for i in x:
-        if isinstance(i, str):
-            # if i[0] != 'M':
-            if not i.isalpha() and i[0] != 'M':
-                x_train.append(i)
-    x_train.sort()
-    n = len(x_train)
-    minimum = float(min(x_train))
-    maximum = float(max(x_train))
-    numpy_array = np.array(x_train)
-    n_numpy_array = numpy_array.reshape(-1, 1)
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=[10,5])
-    # histogram
-    m, bins, patches = ax1.hist(x_train, bins=10, color = 'lightgrey', edgecolor = 'grey')
-    ax1.set_xticks(bins)
-    ax1.set_xlabel('26Al/27Al')
-    ax1.set_ylabel('count')
-    ax1.set_title('All CAI, CV3 Chondrites')
-
-    #KDE
-    x_test = np.linspace(minimum, maximum, n)[:, np.newaxis]
-    model = KernelDensity()
-    model.fit(n_numpy_array)
-    log_dens = model.score_samples(x_test)
-    ax2.fill(x_test, np.exp(log_dens), c='lightgrey')
-    ax2.set_xlabel('26Al/27Al')
-    ax2.set_ylabel('value')
-    ax2.set_title('Kernel Density Estimation')
-    plt.show()
-#al26_CV3()
-
-def al26_CM2():
-    CM2 = data.loc[data['type'] == 'CM2']
-    x = CM2["26Al/27Al"]
-    x_train = []
-    for i in x:
-        if isinstance(i, str):
-            # if i[0] != 'M':
-            if not i.isalpha() and i[0] != 'M':
-                x_train.append(i)
-    x_train.sort()
-    n = len(x_train)
-    minimum = float(min(x_train))
-    maximum = float(max(x_train))
-    numpy_array = np.array(x_train)
-    n_numpy_array = numpy_array.reshape(-1, 1)
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=[10,5])
-    # histogram
-    m, bins = patches = ax1.hist(x_train, bins=10, color = 'lightgrey', edgecolor = 'grey')
-    ax1.set_xticks(bins)
-    ax1.set_xlabel('26Al/27Al')
-    ax1.set_ylabel('count')
-    ax1.set_title('All CAI, CM2 Chondrites')
-
-    #KDE
-    x_test = np.linspace(minimum, maximum, n)[:, np.newaxis]
-    model = KernelDensity()
-    model.fit(n_numpy_array)
-    log_dens = model.score_samples(x_test)
-    ax2.fill(x_test, np.exp(log_dens), c='lightgrey')
-    ax2.set_xlabel('26Al/27Al')
-    ax2.set_ylabel('value')
-    ax2.set_title('Kernel Density Estimation')
-    plt.show()
-#al26_CM2()
-
-def al26_CR2():
-    CR2 = data.loc[data['type'] == 'CR2']
-    x = CR2["26Al/27Al"]
-    x_train = []
-    for i in x:
-        if isinstance(i, str):
-            # if i[0] != 'M':
-            if not i.isalpha() and i[0] != 'M':
-                x_train.append(i)
-    x_train.sort()
-    n = len(x_train)
-    minimum = float(min(x_train))
-    maximum = float(max(x_train))
-    numpy_array = np.array(x_train)
-    n_numpy_array = numpy_array.reshape(-1, 1)
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=[10,5])
-    # histogram
-    m, bins, patches = ax1.hist(x_train, bins=10, color = 'lightgrey', edgecolor = 'grey')
-    ax1.set_xticks(bins)
-    ax1.set_xlabel('26Al/27Al')
-    ax1.set_ylabel('count')
-    ax1.set_title('All CAI, CR2 Chondrites')
-
-    #KDE
-    x_test = np.linspace(minimum, maximum, n)[:, np.newaxis]
-    model = KernelDensity()
-    model.fit(n_numpy_array)
-    log_dens = model.score_samples(x_test)
-    ax2.fill(x_test, np.exp(log_dens), c='lightgrey')
-    ax2.set_xlabel('26Al/27Al')
-    ax2.set_ylabel('value')
-    ax2.set_title('Kernel Density Estimation')
-    plt.show()
-#al26_CR2()
+# other chondrite types that can be used for data for plots
+CO3_0 = data.loc[data['chondrite type'] == 'CO3.0']
+CV3 = data.loc[data['chondrite type'] == 'CV3']
+CM2 = data.loc[data['chondrite type'] == 'CM2']
+CR2 = data.loc[data['chondrite type'] == 'CR2']
 
 #################################################################################
 

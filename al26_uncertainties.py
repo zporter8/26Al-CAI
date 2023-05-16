@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-data = pd.read_csv("/Users/fatima/Desktop/EART119B/Isotopic-CAI-data.csv")
+url = "https://raw.githubusercontent.com/f-jorge/f-jorge.github.io/main/Al26_CAIs_data%20-%2026Al_27Al.csv"
+data = pd.read_csv(url, index_col=0)
 
 #CO3 chondrites example
-CO3_0 = data.loc[data['type'] == 'CO3.0']
+CO3_0 = data.loc[data['chondrite type'] == 'CO3.0']
 x = CO3_0["26Al/27Al"]
 list = []
 # reducing the data to only numerical values by removing words
