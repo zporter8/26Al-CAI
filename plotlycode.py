@@ -149,7 +149,7 @@ fig.show()
 
 
 ######################################
-#html = io.to_html(fig, full_html=True, include_plotlyjs='cdn')
 #import plotly.io as io
+#html = io.to_html(fig, full_html=True, include_plotlyjs='cdn')
 #with open('facetted.html', 'w') as f:
     #f.writelines(io.to_html(fig, include_plotlyjs='cnd', full_html=True))
