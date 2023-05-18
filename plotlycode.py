@@ -67,7 +67,6 @@ fig.update_xaxes(title = "26Al/27Al", range = [-1,7])
 #fig.update_traces(opacity=.75)
 #fig.update_layout(newselection_line_width= 5)
 
-
 g1 = data["CAI size x"]
 g_1 = []
 for i in g1:
@@ -106,9 +105,9 @@ n_large = list(large)
 #print(n_large)
 
 # add traces to scatter plot... small, medium and large grains
-trace1 = go.Scatter(x=new_l, y=n_small, name = "CAI size 0-100", mode= 'markers', xaxis='x2', yaxis= 'y2')
-trace2 = go.Scatter(x=new_l, y=n_medium, name = "CAI size 100-500", mode= 'markers', xaxis='x2', yaxis= 'y2')
-trace3 = go.Scatter(x=new_l, y=n_large, name = "CAI size > 500", mode= 'markers', xaxis='x2', yaxis= 'y2')
+trace1 = go.Scatter(x=new_l, y=n_small, name = "CAI size 0-100", mode= 'markers', xaxis='x2', yaxis= 'y2', error_x = dict(type='data',array = data["(26Al/27Al) 2 sig"]))
+trace2 = go.Scatter(x=new_l, y=n_medium, name = "CAI size 100-500", mode= 'markers', xaxis='x2', yaxis= 'y2', error_x = dict(type='data',array = data["(26Al/27Al) 2 sig"]))
+trace3 = go.Scatter(x=new_l, y=n_large, name = "CAI size > 500", mode= 'markers', xaxis='x2', yaxis= 'y2', error_x = dict(type='data',array = data["(26Al/27Al) 2 sig"]))
 fig.add_traces([trace1, trace2, trace3])
 
 # initialize xaxis2 and yaxis2
@@ -122,6 +121,7 @@ fig.layout.xaxis2.update({'title': '26Al/27Al'})
 fig.layout.xaxis2.update(range = (-1,7))
 
 # The graph's yaxis MUST BE anchored to the graph's xaxis
+fig.layout.yaxis.update({'title': 'Density'})
 fig.layout.yaxis2.update({'anchor': 'x2'})
 fig.layout.yaxis2.update({'title': 'Size'})
 #fig.layout.yaxis2.update(range = (0,30000))
@@ -129,6 +129,21 @@ fig.layout.yaxis2.update({'title': 'Size'})
 # Update the margins to add a title and see graph x-labels.
 fig.layout.margin.update({'t':50, 'b':100})
 #fig.layout.update({'title': '26Al'})
+fig.update_layout(plot_bgcolor='white')
+fig.update_xaxes(
+    mirror=True,
+    #ticks='outside',
+    showline=True,
+    #linecolor='grey',
+    gridcolor='lightgrey'
+)
+fig.update_yaxes(
+    mirror=True,
+    #ticks='outside',
+    showline=True,
+    #linecolor='grey',
+    gridcolor='lightgrey'
+)
 
 fig.show()
 
