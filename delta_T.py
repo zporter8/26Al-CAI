@@ -7,7 +7,7 @@ data = pd.read_csv(url, index_col=0)
 
 def delta_T(a):
     #print("The time difference between time = 0, and when this CAI formed:")
-    return (1.03e6)*(np.log((5.2e-5)/a))
+    return (1.03e6)*(np.log((5.2)/a))
 
 x = data["26Al/27Al"]
 l = []
