@@ -2,8 +2,9 @@
 This project is intended to aid in the effort to process, analyze and share data pertaining to calcium-aluminum-inclusions (CAIs). The python code within this repository can be used to create histograms with their associated kernel density estimation plots, violin plots and scatter plots with associated uncertainties. The data being used was collected by Dr. Emilie Dunham.
 
 **PLOTS:**
-- histogram w/kde: creates a histogram with kernel density estimation overlayed
+- histogram w/kde: creates a histogram with kernel density estimation overlayed using sklearn
 - scatter w/uncertainty: creates a scatter plot with uncertainty attributed to each data point
+- violin plot: creates a violin plot using seaborn
 
 **CHONDRITE DATA:**
 - All: plots 26Al/27Al ratios data for ALL chondrite types
