@@ -2,9 +2,11 @@ import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import pandas as pd
 
+# the data is being taken from the github repository
 url = "https://raw.githubusercontent.com/f-jorge/f-jorge.github.io/main/Al26_CAIs_data%20-%2026Al_27Al.csv"
 data = pd.read_csv(url, index_col=0)
 
+# list of al26 data
 x = data["26Al/27Al"]
 l = []
 # reducing the data to only numerical values by removing words
@@ -18,6 +20,7 @@ l.sort()
 new_l = [float(x) for x in l]
 #print(new_l)
 
+# data loc on specific chondrite type
 CO3_0 = data.loc[data['chondrite type'] == 'CO3.0']
 c = CO3_0["26Al/27Al"]
 l1 = []
@@ -81,7 +84,6 @@ def check_small(number):
     if number <= 100:
         return True
     return False
-
 small = filter(check_small, new_g1)
 n_small = list(small)
 #print(n_small)
@@ -90,7 +92,6 @@ def check_medium(number):
     if number > 100 and number <=500:
         return True
     return False
-
 medium = filter(check_medium, new_g1)
 n_medium = list(medium)
 #print(n_medium)
@@ -99,11 +100,15 @@ def check_large(number):
     if number > 500:
         return True
     return False
-
 large = filter(check_large, new_g1)
 n_large = list(large)
 #print(n_large)
+############################
 
+test = data[['26Al/27Al','CAI size x']]
+#print(test)
+
+############################
 # add traces to scatter plot... small, medium and large grains
 trace1 = go.Scatter(x=new_l, y=n_small, name = "CAI size 0-100", mode= 'markers', xaxis='x2', yaxis= 'y2', error_x = dict(type='data',array = data["(26Al/27Al) 2 sig"]))
 trace2 = go.Scatter(x=new_l, y=n_medium, name = "CAI size 100-500", mode= 'markers', xaxis='x2', yaxis= 'y2', error_x = dict(type='data',array = data["(26Al/27Al) 2 sig"]))
@@ -149,6 +154,7 @@ fig.show()
 
 
 ######################################
+# this is what turns the python code to html for embedding into a website!
 #import plotly.io as io
 #html = io.to_html(fig, full_html=True, include_plotlyjs='cdn')
 #with open('facetted.html', 'w') as f:

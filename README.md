@@ -1,5 +1,5 @@
-# CAI 26Al/27Al Data Sharing and Visualization
-This project is intended to aid in the effort to process, analyze and share data pertaining to calcium-aluminum-inclusions (CAIs). The python code within this repository can be used to create histograms with their associated kernel density estimation plots, and scatter plots with associated uncertainties. The data being used was collected by Dr. Emilie Dunham.
+# CAI 26Al/27Al 
+This project is intended to aid in the effort to process, analyze and share data pertaining to calcium-aluminum-inclusions (CAIs). The python code within this repository can be used to create histograms with their associated kernel density estimation plots, violin plots and scatter plots with associated uncertainties. The data being used was collected by Dr. Emilie Dunham.
 
 **PLOTS:**
 - histogram w/kde: creates a histogram with kernel density estimation overlayed
